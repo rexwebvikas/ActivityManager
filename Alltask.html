@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-Task</title>
+    <link rel="stylesheet" href="css/Activity.css">
+    <link rel="stylesheet" href="css/evo-calendar.css">
+    <link rel="stylesheet" href="css/evo-calendar.midnight-blue.css">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse ">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            </div>
+        </div>
+    </nav>
+    <div id="wrapper">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="../ActivityManager/Activity.html">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="../ActivityManager/Plantask.html">Plan you Day</a>
+                </li>
+                <li>
+                    <a href="../ActivityManager/Alltask.html" onclick="display(),event.preventDefault()">All Task</a>
+                </li>
+                <li>
+                    <a href="../ActivityManager/Calender.html" onclick="Calender()">Calender</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+            </button>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+
+
+    <div class="container-fluid bg-light">
+        <div class="container col-sm-9 col-md-6 col-lg-12 ml-2 w-50 bg-light" id="myTasks">
+            <h4 class="text-center text-uppercase text-danger">All Tasks</h4>
+            <input type="text" class="form-control" id="myInput" onkeyup="mysreach()" placeholder="Type for Search"
+                title="Type in a name"><br>
+            <table class="table table-striped" bordered="2" id="disp"></table>
+        </div>
+    </div>
+
+    <div>
+        <table id="record_contant" class="table table-striped">
+    </div>
+
+
+
+</body>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/Activity.js"></script>
+<script src="js/evo-calendar.js"></script>
+<script src="js/evo-calendar.min.js"></script>
+<script src="js/calender.js"></script>
+<script src="js/Plantask.js"></script>
+<script src="js/alltask.js"></script>
+<script>
+    function display() {
+
+        var a =
+            "<tr><th onclick ='sorttable(0)'>Task</th><th onclick ='sorttable(1)'>Status</th><th onclick ='sorttable(2)'>Priority</th><th onclick ='sorttable(3)'>date</th><th>Delete Item</th></tr>";
+        for (let i = 0; i < arr.length; i++) {
+
+            a += "<tr>";
+            a += "<td>" + arr[i].Task + "</td>";
+            a += "<td>" + arr[i].Status + "</td>";
+            a += "<td>" + arr[i].Priority + "</td>";
+            a += "<td>" + arr[i].date + "</td>";
+            a += `<td><button class="btn btn-danger" onclick="deletes(${i})">Delete Item</button></td>`;
+            a += "</tr>";
+        }
+        document.getElementById('record_contant').innerHTML = a;
+
+        function sorttable(p) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("record_contant");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[p];
+                    y = rows[i + 1].getElementsByTagName("TD")[p];
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+
+
+    }
+    getData();
+    display();
+
+    function mysreach() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("record_contant");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+
+                }
+            }
+        }
+    }
+
+    getData();
+    display();
+</script>
+
+
+</html>
